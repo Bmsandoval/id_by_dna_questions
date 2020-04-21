@@ -1,4 +1,4 @@
-package formats
+package reformatter
 
 type Common struct {
 	Part string

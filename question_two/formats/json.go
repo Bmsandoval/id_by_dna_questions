@@ -3,9 +3,14 @@ package formats
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/bmsandoval/question_two/reformatter"
 	"io/ioutil"
 	"strings"
 )
+
+func init() {
+	reformatter.SelfRegister(".json", JsonFormat{})
+}
 
 type JsonFormat struct {}
 
@@ -15,8 +20,8 @@ type JsonFile struct {
 	Numbers []int
 }
 
-func (jf JsonFormat) ParseFile(filePath string) ([]Common, error) {
-	var commonArray []Common
+func (jf JsonFormat) ParseFile(filePath string) ([]reformatter.Common, error) {
+	var commonArray []reformatter.Common
 	file, _ := ioutil.ReadFile(filePath)
 
 	data := JsonFile{}
@@ -31,7 +36,7 @@ func (jf JsonFormat) ParseFile(filePath string) ([]Common, error) {
 			xError = true
 		}
 
-		commonArray = append(commonArray, Common{
+		commonArray = append(commonArray, reformatter.Common{
 			Part:       data.Parts[i],
 			Number:     string(data.Numbers[i]),
 			PartLength: len(data.Parts[i]),

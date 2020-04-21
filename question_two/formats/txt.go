@@ -4,15 +4,20 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/bmsandoval/question_two/reformatter"
 	"log"
 	"os"
 	"regexp"
 	"strings"
 )
 
+func init() {
+	reformatter.SelfRegister(".txt", TextFormat{})
+}
+
 type TextFormat struct {}
 
-func (tf TextFormat) ParseFile(filePath string) ([]Common, error) {
+func (tf TextFormat) ParseFile(filePath string) ([]reformatter.Common, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -20,7 +25,7 @@ func (tf TextFormat) ParseFile(filePath string) ([]Common, error) {
 
 	defer file.Close()
 
-	var commonArray []Common
+	var commonArray []reformatter.Common
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -44,7 +49,7 @@ func (tf TextFormat) ParseFile(filePath string) ([]Common, error) {
 				xError = true
 			}
 
-			commonArray = append(commonArray, Common{
+			commonArray = append(commonArray, reformatter.Common{
 				Part:       results[i],
 				Number:     results[j],
 				PartLength: len(results[i]),
