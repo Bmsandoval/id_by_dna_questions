@@ -2,11 +2,15 @@ package mapper
 
 func Insert(value string) error {
 	var err error
+
+	// Get the hash
 	hash := Hash(value)
+
+	// use a mask to get the right bucket
 	bucketIndex := *hash & bucketMask
 	bucket := &HashMap[bucketIndex]
 	if len(*bucket) == 0 {
-		bucket, err = Resize(bucket)
+		bucket, err = Size(bucket)
 		if err != nil {
 			return err
 		}
@@ -28,6 +32,7 @@ func Insert(value string) error {
 				link.Count++
 				break
 			} else if link.Next == nilEntry {
+				// if we are at the end of the list, add new one
 				link.Next = &MapEntry{
 					Value: value,
 					Count: 1,
@@ -35,6 +40,7 @@ func Insert(value string) error {
 				}
 				break
 			} else {
+				// if not at end of list, visit next child
 				link = link.Next
 			}
 		}

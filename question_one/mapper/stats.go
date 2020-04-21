@@ -9,7 +9,9 @@ func Stats() {
 	total := 0
 	var best *MapEntry
 	var nilEntry *MapEntry
+	// for each bucket
 	for _, bucket := range HashMap {
+		// walk each entry
 		for _, entry := range bucket {
 			if entry == nilEntry {
 				continue
@@ -20,6 +22,7 @@ func Stats() {
 			}
 			total += entry.Count
 
+			// and visit all children
 			item := entry
 			for item.Next != nil {
 				item = item.Next

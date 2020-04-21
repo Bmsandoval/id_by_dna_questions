@@ -1,6 +1,6 @@
 package mapper
 
-func Resize(bucket *[]*MapEntry) (*[]*MapEntry, error) {
+func Size(bucket *[]*MapEntry) (*[]*MapEntry, error) {
 	oldBucket := *bucket
 	if oldBucket == nil || len(oldBucket) == 0 {
 		newBucket := make([]*MapEntry, initialSize)

@@ -3,7 +3,6 @@ package parser
 import (
 	"bufio"
 	"bytes"
-	"io"
 	"os"
 	"strings"
 )
@@ -19,25 +18,10 @@ func ParseFile(filePath string) ([]string, error) {
 	var groups []string
 	var group *bytes.Buffer
 
-	chunkCount := 0
-	reader := bufio.NewReader(file)
-	for true {
-		lineBytes, err := reader.ReadBytes('\n')
-		if err == io.EOF {
-			break
-		}
-		if err != nil{
-			return nil, err
-		}
-		if lineBytes == nil {
-			return nil, nil
-		}
-		var line string
-		line = string(lineBytes)
-
-		text := strings.TrimSpace(line)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		text := strings.TrimSpace(scanner.Text())
 		if text[0] == '>' {
-			chunkCount++
 			if group != nil {
 				groups = append(groups, group.String())
 			}
@@ -48,6 +32,10 @@ func ParseFile(filePath string) ([]string, error) {
 	}
 	if group != nil {
 		groups = append(groups, group.String())
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, err
 	}
 
 	return groups, nil

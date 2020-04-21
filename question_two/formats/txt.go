@@ -2,7 +2,6 @@ package formats
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"github.com/bmsandoval/question_two/reformatter"
 	"log"
@@ -37,9 +36,6 @@ func (tf TextFormat) ParseFile(filePath string) ([]reformatter.Common, error) {
 		}
 
 		results := pairRegex.FindAllString(text, -1)
-		if len(results) % 2 == 1 {
-			return nil, errors.New("expected pairs")
-		}
 
 		output := ""
 		for i,j := 0,1; j < len(results); i,j=i+2,j+2 {

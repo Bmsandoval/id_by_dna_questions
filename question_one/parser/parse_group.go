@@ -5,17 +5,14 @@ import (
 	"regexp"
 )
 
-func ParseGroup(group string, kmerLen int) []string {
-	var kmers []string
-
-	for i := 0; i < len(group)-kmerLen; i++ {
-		subGroup := group[i:i+kmerLen]
-		pattern := fmt.Sprintf("([ATCG]{%d})", kmerLen)
-		match, _ := regexp.MatchString(pattern, subGroup)
-		if match {
-			kmers = append(kmers, subGroup)
-		}
+func ParseGroup(group string, kmerLen int) ([]string, error) {
+	pattern := fmt.Sprintf("([ATCG]{%d})", kmerLen)
+	pairRegex, err := regexp.Compile(pattern)
+	if err != nil {
+		return nil, err
 	}
 
-	return kmers
+	results := pairRegex.FindAllString(group, -1)
+
+	return results, nil
 }
